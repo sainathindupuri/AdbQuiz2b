@@ -31,34 +31,34 @@ def showDetails():
     
     starttime = timeit.default_timer()
     query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-    cursor.execute(query_str+" ORDER BY a.D DESC")
+    cursor.execute(query_str+" ORDER BY RAND()")
     data1 = cursor.fetchall()
     time1 = timeit.default_timer() - starttime
 
 
     starttime = timeit.default_timer()
     query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-    cursor.execute(query_str+" ORDER BY a.D DESC")
+    cursor.execute(query_str+" ORDER BY RAND()")
     data2 = cursor.fetchall()
     time2 = timeit.default_timer() - starttime
 
 
     starttime = timeit.default_timer()
     query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-    cursor.execute(query_str+" ORDER BY a.D DESC")
+    cursor.execute(query_str+" ORDER BY RAND()")
     data3 = cursor.fetchall()
     time3 = timeit.default_timer() - starttime
 
 
     starttime = timeit.default_timer()
     query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-    cursor.execute(query_str+" ORDER BY a.D DESC")
+    cursor.execute(query_str+" ORDER BY RAND()")
     data4 = cursor.fetchall()
     time4 = timeit.default_timer() - starttime
 
     starttime = timeit.default_timer()
     query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-    cursor.execute(query_str+" ORDER BY a.D DESC")
+    cursor.execute(query_str+" ORDER BY RAND()")
     data5 = cursor.fetchall()
     time5 = timeit.default_timer() - starttime
 
@@ -78,7 +78,7 @@ def showDetailsCache():
     if( not r.get(n+num1+num2)):
         starttime = timeit.default_timer()
         query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-        cursor.execute(query_str+" ORDER BY a.D DESC")
+        cursor.execute(query_str+" ORDER BY RAND()")
         data1 = cursor.fetchall()
         time1 = timeit.default_timer() - starttime
         r.set(n+num1+num2, pickle.dumps(data1))
@@ -90,7 +90,7 @@ def showDetailsCache():
     if( not r.get(n+num1+num2)):
         starttime = timeit.default_timer()
         query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-        cursor.execute(query_str+" ORDER BY a.D DESC")
+        cursor.execute(query_str+" ORDER BY RAND()")
         data2 = cursor.fetchall()
         r.set(n+num1+num2, pickle.dumps(data2))
         time2 = timeit.default_timer() - starttime
@@ -102,7 +102,7 @@ def showDetailsCache():
     if( not r.get(n+num1+num2)):
         starttime = timeit.default_timer()
         query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-        cursor.execute(query_str+" ORDER BY a.D DESC")
+        cursor.execute(query_str+" ORDER BY RAND()")
         data3 = cursor.fetchall()
         r.set(n+num1+num2, pickle.dumps(data3))
         time3 = timeit.default_timer() - starttime
@@ -115,7 +115,7 @@ def showDetailsCache():
     if( not r.get(n+num1+num2)):
         starttime = timeit.default_timer()
         query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-        cursor.execute(query_str+" ORDER BY a.D DESC")
+        cursor.execute(query_str+" ORDER BY RAND()")
         data4 = cursor.fetchall()
         r.set(n+num1+num2, pickle.dumps(data4))
         time4 = timeit.default_timer() - starttime
@@ -126,7 +126,7 @@ def showDetailsCache():
     if( not r.get(n+num1+num2)):
         starttime = timeit.default_timer()
         query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
-        cursor.execute(query_str+" ORDER BY a.D DESC")
+        cursor.execute(query_str+" ORDER BY RAND()")
         data5 = cursor.fetchall()
         r.set(n+num1+num2, pickle.dumps(data5))
         time5 = timeit.default_timer() - starttime
