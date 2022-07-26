@@ -66,6 +66,79 @@ def showDetails():
     
     return render_template('ShowNLargest.html',data1 = data1, data2 = data2, data3 = data3, data4 = data4, data5 = data5, time = times)  
 
+
+
+@app.route('/ShowNLargestCache', methods=['GET', 'POST'])
+def showDetailsCache():
+    cursor = connection.cursor()    
+    num1 = request.form.get("RangeStart")
+    num2 = request.form.get("RangeEnd")   
+    n = request.form.get("N")
+
+    if( not r.get(n+num1+num2)):
+        starttime = timeit.default_timer()
+        query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+        cursor.execute(query_str+" ORDER BY a.D DESC")
+        data1 = cursor.fetchall()
+        time1 = timeit.default_timer() - starttime
+        r.set(n+num1+num2, pickle.dumps(data1))
+    else:
+        starttime = timeit.default_timer()
+        data1 = pickle.loads(r.get(n+num1+num2))
+        time1 = timeit.default_timer() - starttime
+
+    if( not r.get(n+num1+num2)):
+        starttime = timeit.default_timer()
+        query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+        cursor.execute(query_str+" ORDER BY a.D DESC")
+        data2 = cursor.fetchall()
+        r.set(n+num1+num2, pickle.dumps(data2))
+        time2 = timeit.default_timer() - starttime
+    else:
+        starttime = timeit.default_timer()
+        data2 = pickle.loads(r.get(n+num1+num2))
+        time2 = timeit.default_timer() - starttime
+
+    if( not r.get(n+num1+num2)):
+        starttime = timeit.default_timer()
+        query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+        cursor.execute(query_str+" ORDER BY a.D DESC")
+        data3 = cursor.fetchall()
+        r.set(n+num1+num2, pickle.dumps(data3))
+        time3 = timeit.default_timer() - starttime
+    else:
+        starttime = timeit.default_timer()
+        data3 = pickle.loads(r.get(n+num1+num2))
+        time3 = timeit.default_timer() - starttime
+
+
+    if( not r.get(n+num1+num2)):
+        starttime = timeit.default_timer()
+        query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+        cursor.execute(query_str+" ORDER BY a.D DESC")
+        data4 = cursor.fetchall()
+        r.set(n+num1+num2, pickle.dumps(data4))
+        time4 = timeit.default_timer() - starttime
+    else:
+        starttime = timeit.default_timer()
+        data4 = pickle.loads(r.get(n+num1+num2))
+        time4 = timeit.default_timer() - starttime
+    if( not r.get(n+num1+num2)):
+        starttime = timeit.default_timer()
+        query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+        cursor.execute(query_str+" ORDER BY a.D DESC")
+        data5 = cursor.fetchall()
+        r.set(n+num1+num2, pickle.dumps(data5))
+        time5 = timeit.default_timer() - starttime
+    else:
+        starttime = timeit.default_timer()
+        data5 = pickle.loads(r.get(n+num1+num2))
+        time5 = timeit.default_timer() - starttime
+
+    times = [time1,time2,time3,time4, time5]
+    
+    return render_template('ShowNLargestCache.html',data1 = data1, data2 = data2, data3 = data3, data4 = data4, data5 = data5, time = times)  
+
 @app.route('/Question13', methods=['GET', 'POST'])
 def ZTime():
     cursor = connection.cursor()   
