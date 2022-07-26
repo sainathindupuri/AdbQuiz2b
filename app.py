@@ -2,13 +2,18 @@ import string
 import time
 import pyodbc
 import os
+import redis
+import timeit
+import hashlib
+import pickle
 from flask import Flask, Request, render_template, request, flash
 
 app = Flask(__name__, template_folder="templates")
-
 connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server=tcp:adbsai.database.windows.net,1433;Database=adb;Uid=sainath;Pwd=Shiro@2018;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
-
 cursor = connection.cursor()
+
+r = redis.StrictRedis(host='adb-quiz3.redis.cache.windows.net', port=6380, db=0,
+                      password='bGWVXkw0gkglji3NxJ2c4dapdnXSxI8dtAzCaKsPnF8=', ssl=True)
 
 
 
@@ -19,22 +24,47 @@ def Hello():
 @app.route('/ShowNLargest', methods=['GET', 'POST'])
 def showDetails():
     cursor = connection.cursor()    
-    num1 = request.form.get("num1")
-    min_mag = request.form.get("magMin")
-   
-    max_mag = request.form.get("magMax")
+    num1 = request.form.get("RangeStart")
+    num2 = request.form.get("RangeEnd")   
+    n = request.form.get("N")
 
-    print("max",max_mag)
-    print("min",min_mag)
-    param_data = (num1,max_mag,min_mag)
-    query_str = "select top "+num1+" a.id, b.place, a.mag from dbo.ds a join dbo.dsi b on a.id = b.id where a.mag <="+max_mag+" and a.mag >="+min_mag 
+    
+    starttime = timeit.default_timer()
+    query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+    cursor.execute(query_str+" ORDER BY a.D DESC")
+    data1 = cursor.fetchall()
+    time1 = timeit.default_timer() - starttime
 
-    print(query_str)
-    cursor.execute(query_str+" ORDER BY a.mag DESC")
-    N_Laragest_data = cursor.fetchall()
-    cursor.execute(query_str+" ORDER BY a.mag ASC")
-    N_smallest_data = cursor.fetchall()
-    return render_template('ShowNLargest.html',n=num1, data1 = N_Laragest_data, data2 = N_smallest_data)  
+
+    starttime = timeit.default_timer()
+    query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+    cursor.execute(query_str+" ORDER BY a.D DESC")
+    data2 = cursor.fetchall()
+    time2 = timeit.default_timer() - starttime
+
+
+    starttime = timeit.default_timer()
+    query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+    cursor.execute(query_str+" ORDER BY a.D DESC")
+    data3 = cursor.fetchall()
+    time3 = timeit.default_timer() - starttime
+
+
+    starttime = timeit.default_timer()
+    query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+    cursor.execute(query_str+" ORDER BY a.D DESC")
+    data4 = cursor.fetchall()
+    time4 = timeit.default_timer() - starttime
+
+    starttime = timeit.default_timer()
+    query_str = "select top "+n+" * from ds2b a where a.D <="+num2+" and a.D >="+num1    
+    cursor.execute(query_str+" ORDER BY a.D DESC")
+    data5 = cursor.fetchall()
+    time5 = timeit.default_timer() - starttime
+
+    times = [time1,time2,time3,time4, time5]
+    
+    return render_template('ShowNLargest.html',data1 = data1, data2 = data2, data3 = data3, data4 = data4, data5 = data5, time = times)  
 
 @app.route('/Question13', methods=['GET', 'POST'])
 def ZTime():
